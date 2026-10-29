@@ -43,3 +43,6 @@ secrets/
 # OS clutter
 .DS_Store
 Thumbs.db
+
+# Local notes for Claude Code (kept on this computer only)
+CLAUDE.md
