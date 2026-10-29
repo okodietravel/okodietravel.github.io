@@ -1,0 +1,45 @@
+# Everything in this repo is published on okodietravel.com, so keep private files out.
+
+# Secrets, keys and environment variables
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+id_ed25519*
+client_secret*.json
+credentials*.json
+service-account*.json
+token*.json
+*.secret
+secrets/
+
+# Documents
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
+*.ppt
+*.pptx
+*.odt
+*.ods
+*.odp
+*.rtf
+*.pages
+*.numbers
+
+# Logs and local tool files
+*.log
+.claude/settings.local.json
+.vscode/
+.idea/
+
+# OS clutter
+.DS_Store
+Thumbs.db

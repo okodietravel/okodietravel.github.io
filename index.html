@@ -65,10 +65,14 @@ footer{padding:28px 0;text-align:center;color:var(--muted);font-size:.9rem}
 .enq textarea{min-height:120px;resize:vertical}
 .fbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .fbtns .btn{margin:0}
-.btn.wa{background:#1fa855;color:#fff}
 .btn.em{background:var(--accent);color:#fff}
+button.btn{border:0;font:inherit;font-weight:700;cursor:pointer}
+button.btn[disabled]{opacity:.6;cursor:wait}
+.done{color:var(--accent);font-weight:700;margin:10px 0 0}
+.alt-contact{color:var(--muted);margin:18px 0 0}
+.alt-contact a{color:var(--accent);font-weight:600}
 #q-hint{color:#c0392b;font-size:.9rem;margin:10px 0 0;min-height:1.2em}
-.note{color:var(--muted);font-size:.85rem;margin:6px 0 0}
+.enq [aria-invalid="true"]{border-color:#c0392b;outline-color:#c0392b}
 @media(max-width:560px){.fgrid{grid-template-columns:1fr}}
 header{background:radial-gradient(900px 420px at 88% 0%,rgba(232,163,61,.2),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(60,192,184,.2),transparent 60%),var(--hero)}
 nav a.link.cta{background:var(--accent2);color:#1d2a33;padding:8px 18px;border-radius:999px;font-weight:700;opacity:1}
@@ -181,21 +185,22 @@ details p{margin:0 0 16px;color:var(--muted)}
  <div class="wrap">
   <h2>Send an enquiry</h2>
   <p class="sub">Tell us what you need and we’ll get back to you.</p>
-  <div class="card enq">
+  <form id="q-form" class="card enq" action="https://docs.google.com/forms/d/e/1FAIpQLSeF-ulWJTm_jaRCjLy2xbpV1JugcxefE9M0dEWa9gYSfzbS4g/formResponse" method="POST" novalidate>
    <div class="fgrid">
-    <div><label for="q-name">Full name</label><input id="q-name" type="text" autocomplete="name" placeholder="Your name"></div>
-    <div><label for="q-contact">Phone or email</label><input id="q-contact" type="text" autocomplete="email" placeholder="How can we reach you?"></div>
-    <div><label for="q-service">Service</label><select id="q-service"><option>Educational scholarship abroad</option><option>Visa application assistance</option><option>Ticketing</option><option>Tours</option><option>Something else</option></select></div>
-    <div><label for="q-dest">Destination or country</label><input id="q-dest" type="text" placeholder="e.g. UK, USA, China"></div>
-    <div class="full"><label for="q-msg">Your message</label><textarea id="q-msg" placeholder="Tell us a little about your plans"></textarea></div>
+    <div><label for="q-name">Full name</label><input id="q-name" name="entry.62523523" type="text" autocomplete="name" placeholder="Your name" required></div>
+    <div><label for="q-email">Email</label><input id="q-email" name="emailAddress" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+    <div><label for="q-phone">Phone or WhatsApp number</label><input id="q-phone" name="entry.262939565" type="tel" autocomplete="tel" placeholder="e.g. +46 70 123 45 67" required></div>
+    <div><label for="q-service">Service</label><select id="q-service" name="entry.1220299064"><option>Educational scholarship abroad</option><option>Visa application assistance</option><option>Ticketing</option><option>Tours</option><option>Something else</option></select></div>
+    <div class="full"><label for="q-dest">Destination or country</label><input id="q-dest" name="entry.1980718789" type="text" placeholder="e.g. UK, USA, China" required></div>
+    <div class="full"><label for="q-msg">Your message</label><textarea id="q-msg" name="entry.1463423049" placeholder="Tell us a little about your plans" required></textarea></div>
    </div>
    <div class="fbtns">
-    <a id="q-wa" class="btn wa" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
-    <a id="q-mail" class="btn em" href="#" target="_blank" rel="noopener">Send by email</a>
+    <button id="q-send" class="btn em" type="submit">Send enquiry</button>
    </div>
    <p id="q-hint" role="alert"></p>
-   <p class="note">Your message opens in WhatsApp or your email app, ready to send. This form does not store your details on this website; they are shared only when you press send.</p>
-  </div>
+   <p id="q-done" class="done" role="status" hidden>Thank you! Your enquiry has been sent and we’ll get back to you soon.</p>
+  </form>
+  <p class="alt-contact">Prefer to chat? <a href="https://wa.me/46762623488" target="_blank" rel="noopener">Message us on WhatsApp</a> or <a href="mailto:support@okodietravel.com">email support@okodietravel.com</a>.</p>
  </div>
 </section>
 
@@ -217,19 +222,27 @@ details p{margin:0 0 16px;color:var(--muted)}
 <script>
 (function(){
 var f=function(i){return document.getElementById(i)};
-function build(){
-var n=f('q-name').value.trim(),c=f('q-contact').value.trim(),s=f('q-service').value,d=f('q-dest').value.trim(),m=f('q-msg').value.trim();
-var t='Hello Okodie Travel Consult,\n\nName: '+n+'\nService: '+s+'\nDestination: '+(d||'-')+'\nMy contact: '+(c||'-')+'\n\n'+m;
-f('q-wa').href='https://wa.me/46762623488?text='+encodeURIComponent(t);
-f('q-mail').href='mailto:support@okodietravel.com?subject='+encodeURIComponent('Enquiry: '+s)+'&body='+encodeURIComponent(t);
-}
-['q-name','q-contact','q-service','q-dest','q-msg'].forEach(function(i){f(i).addEventListener('input',build);f(i).addEventListener('change',build);});
-['q-wa','q-mail'].forEach(function(i){f(i).addEventListener('click',function(e){
-if(!f('q-name').value.trim()||!f('q-msg').value.trim()){e.preventDefault();f('q-hint').textContent='Please add your name and a short message first.';}
-else{f('q-hint').textContent='';build();}
-});});
-document.querySelectorAll('a.more').forEach(function(a){a.addEventListener('click',function(){f('q-service').value=a.dataset.s;build();});});
-build();
+var form=f('q-form'),send=f('q-send'),hint=f('q-hint'),done=f('q-done');
+// How each required field is named in the "Please fill in your ..." message.
+var names={'q-name':'full name','q-email':'email','q-phone':'phone or WhatsApp number','q-dest':'destination or country','q-msg':'message'};
+function list(a){return a.length<2?a[0]:a.slice(0,-1).join(', ')+' and '+a[a.length-1];}
+function flag(el,bad){if(bad)el.setAttribute('aria-invalid','true');else el.removeAttribute('aria-invalid');}
+form.querySelectorAll('[required]').forEach(function(el){el.addEventListener('input',function(){flag(el,false);});});
+// Posts to Google Forms' formResponse endpoint. no-cors gives an opaque response, so success can't be confirmed; only network failures are caught.
+form.addEventListener('submit',function(e){
+e.preventDefault();
+done.hidden=true;
+var req=form.querySelectorAll('[required]'),missing=[].filter.call(req,function(el){var bad=!el.value.trim();flag(el,bad);return bad;});
+if(missing.length){hint.textContent=missing.length===req.length?'Please fill in all the fields.':'Please fill in your '+list(missing.map(function(el){return names[el.id];}))+'.';missing[0].focus();return;}
+if(!f('q-email').validity.valid){flag(f('q-email'),true);hint.textContent='Please enter a valid email address, like name@example.com.';f('q-email').focus();return;}
+if(form.action.indexOf('/formResponse')<0){hint.textContent='Sorry, the enquiry form is not connected yet. Please message us on WhatsApp or email instead.';return;}
+hint.textContent='';send.disabled=true;send.textContent='Sending…';
+fetch(form.action,{method:'POST',mode:'no-cors',body:new URLSearchParams(new FormData(form))})
+.then(function(){form.reset();done.hidden=false;})
+.catch(function(){hint.textContent='Sorry, something went wrong. Please try again, or message us on WhatsApp or email.';})
+.then(function(){send.disabled=false;send.textContent='Send enquiry';});
+});
+document.querySelectorAll('a.more').forEach(function(a){a.addEventListener('click',function(){f('q-service').value=a.dataset.s;});});
 })();
 </script>
 </body>
